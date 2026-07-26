@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government School Attendance System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Government School Attendance System</h1>
+
+        <!-- Attendance Form -->
+        <div class="card">
+
+            <h2>Add Attendance Record</h2>
+
+            <form id="attendanceForm">
+
+                <input type="hidden" id="record_id">
+
+                <div class="row">
+
+                    <div class="input-group">
+                        <label>Student ID</label>
+                        <input type="text" id="student_id" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Student Name</label>
+                        <input type="text" id="student_name" required>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="input-group">
+                        <label>Class & Section</label>
+                        <input type="text" id="class_section" placeholder="8-A" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="input-group">
+                        <label>Status</label>
+
+                        <select id="present_absent">
+
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="input-group">
+                        <label>Reason</label>
+                        <input type="text" id="reason">
+                    </div>
+
+                </div>
+
+                <button type="submit" id="saveBtn">
+                    Save Record
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Search & Filter -->
+
+        <div class="card">
+
+            <h2>Search Attendance</h2>
+
+            <div class="row">
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Search by Student Name">
+
+                <select id="filterStatus">
+
+                    <option value="">All</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <!-- Warning Section -->
+
+        <div class="card">
+
+            <h2>Dropout Early Warning</h2>
+
+            <div id="warningBox">
+
+                No warning available.
+
+            </div>
+
+        </div>
+
+        <!-- Attendance Table -->
+
+        <div class="card">
+
+            <h2>Attendance Records</h2>
+
+            <div class="table-container">
+
+                <table id="attendanceTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

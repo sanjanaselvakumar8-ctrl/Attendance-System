@@ -1,0 +1,18 @@
+{
+  "name": "attendance",
+  "version": "1.0.0",
+  "description": "Government School Attendance and Dropout Early Warning System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "S. Sanjana",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "sqlite3": "^5.1.7"
+  }
+}
