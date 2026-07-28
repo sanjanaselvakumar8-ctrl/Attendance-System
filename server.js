@@ -30,22 +30,32 @@ CREATE TABLE IF NOT EXISTS attendance (
     class_section TEXT NOT NULL,
     date TEXT NOT NULL,
     present_absent TEXT NOT NULL,
-    reason TEXT
+    reason TEXT,
+    remarks TEXT,
+    UNIQUE(student_id, date)
 )
 `);
 
 // ===================== GET ALL RECORDS =====================
 app.get("/api/attendance", (req, res) => {
-    db.all("SELECT * FROM attendance ORDER BY date DESC", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }
 
-        res.json(rows);
-    });
+    db.all(
+        "SELECT * FROM attendance ORDER BY date DESC",
+        [],
+        (err, rows) => {
+
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: err.message
+                });
+            }
+
+            res.json(rows);
+
+        }
+    );
+
 });
 
 // ===================== ADD RECORD =====================
@@ -57,10 +67,10 @@ app.post("/api/attendance", (req, res) => {
         class_section,
         date,
         present_absent,
-        reason
+        reason,
+        remarks
     } = req.body;
 
-    // Validation
     if (
         !student_id ||
         !student_name ||
@@ -76,8 +86,16 @@ app.post("/api/attendance", (req, res) => {
 
     const sql = `
     INSERT INTO attendance
-    (student_id, student_name, class_section, date, present_absent, reason)
-    VALUES (?, ?, ?, ?, ?, ?)
+    (
+        student_id,
+        student_name,
+        class_section,
+        date,
+        present_absent,
+        reason,
+        remarks
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.run(
@@ -88,11 +106,24 @@ app.post("/api/attendance", (req, res) => {
             class_section,
             date,
             present_absent,
-            reason || ""
+            reason || "",
+            remarks || ""
         ],
         function (err) {
 
             if (err) {
+
+                if (
+                    err.message &&
+                    err.message.includes("UNIQUE")
+                ) {
+                    return res.status(409).json({
+                        success: false,
+                        message:
+                            "Attendance already recorded for this student on this date."
+                    });
+                }
+
                 return res.status(500).json({
                     success: false,
                     message: err.message
@@ -104,6 +135,7 @@ app.post("/api/attendance", (req, res) => {
                 message: "Attendance Added Successfully",
                 record_id: this.lastID
             });
+
         }
     );
 
@@ -120,18 +152,20 @@ app.put("/api/attendance/:id", (req, res) => {
         class_section,
         date,
         present_absent,
-        reason
+        reason,
+        remarks
     } = req.body;
 
     const sql = `
     UPDATE attendance
     SET
-    student_id=?,
-    student_name=?,
-    class_section=?,
-    date=?,
-    present_absent=?,
-    reason=?
+        student_id=?,
+        student_name=?,
+        class_section=?,
+        date=?,
+        present_absent=?,
+        reason=?,
+        remarks=?
     WHERE record_id=?
     `;
 
@@ -144,11 +178,24 @@ app.put("/api/attendance/:id", (req, res) => {
             date,
             present_absent,
             reason,
+            remarks,
             id
         ],
         function (err) {
 
             if (err) {
+
+                if (
+                    err.message &&
+                    err.message.includes("UNIQUE")
+                ) {
+                    return res.status(409).json({
+                        success: false,
+                        message:
+                            "Another record already exists for this student on this date."
+                    });
+                }
+
                 return res.status(500).json({
                     success: false,
                     message: err.message
